@@ -1,0 +1,38 @@
+{
+  "name": "react-app-framework",
+  "version": "0.0.1",
+  "description": "starter framework for react.js apps",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react.js",
+    "javascript",
+    "js"
+  ],
+  "author": "Juan Olvera",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^4.2.0",
+    "envify": "^1.2.1",
+    "grunt": "^0.4.5",
+    "grunt-autoprefixer": "^0.8.1",
+    "grunt-browserify": "^2.1.2",
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-contrib-imagemin": "^0.7.1",
+    "grunt-contrib-less": "^0.11.3",
+    "grunt-contrib-uglify": "^0.5.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-react": "^0.8.2",
+    "grunt-rsync": "^0.6.1",
+    "matchdep": "^0.3.0",
+    "react": "^0.10.0",
+    "reactify": "^0.13.1"
+  },
+  "dependencies": {
+    "backbone": "^1.1.2",
+    "jquery": "^2.1.1",
+    "lodash": "^2.4.1"
+  }
+}
