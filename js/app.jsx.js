@@ -30,8 +30,16 @@ var re_weburl = new RegExp(
 );
 
 var FormView = React.createClass({
+  getInitialState: function() {
+    return { 
+      speedScore: 0,
+      ruleResults: {}
+    };
+  },
+
   componentDidUpdate: function() {
-    console.log(this.state.data); 
+    console.log(this.state.speedScore); 
+    console.log(this.state.ruleResults); 
   },
 
   componentDidMount: function() {
@@ -57,11 +65,13 @@ var FormView = React.createClass({
     })
     
     .done(function(data) {
-      var seoData = data.seo;
+      // getting speed results
+      var speedData = data.seo.speed;
 
-      self.setState({ data: seoData });
-
-      self._renderList();
+      self.setState({ 
+        speedScore: speedData.score,
+        ruleResults: speedData.formattedResults.ruleResults
+      });
     })
 
     .fail(function(xhr, status, error) {
@@ -107,22 +117,6 @@ var FormView = React.createClass({
     }
   },
 
-  _renderList: function() {
-    var list = [];
-
-    _.each(this.state.data.speed.formattedResults.ruleResults, function(value, key) {
-      list.push(value);    
-    });
-
-    console.log(list);
-
-    list.map(function(value, key) {
-      return (
-        <p>{value} <strong>{key}</strong></p>
-      ); 
-    });
-  },
-
   render: function() {
     return (
       <div className="app-form">
@@ -132,10 +126,52 @@ var FormView = React.createClass({
           <button>Submit</button>
         </form>
         <hr />
-        {this._renderList}
+        <SpeedResults 
+          speedScore={this.state.speedScore} 
+          ruleResults={this.state.ruleResults}
+        />
       </div>
     );
   } 
+});
+
+var SpeedResults = React.createClass({
+  render: function() {
+    var ruleResults = this.props.ruleResults,
+      list = [];
+
+    // we create an array to use `.map()` method
+    _.each(ruleResults, function(value, key) {
+      list.push(value);
+    });
+
+    var results = list.map(function(result) {
+      var _class = function() {
+        if (result.ruleImpact === 0) {
+          return "rule-green";
+        }
+
+        if (result.ruleImpact > 0 && result.ruleImpact < 3) {
+          return "rule-yellow"; 
+        } 
+        
+        if (result.ruleImpact > 3) {
+          return "rule-red"; 
+        }
+      };
+
+      return (
+        <li className={_class()}>{result.localizedRuleName}</li>
+      );
+    });
+
+    return (
+      <div className="app-speed-results">
+        <h3>Speed Score: <strong>{this.props.speedScore}</strong></h3>
+        <ul>{results}</ul>
+      </div>
+    );
+  }
 });
 
 React.renderComponent(<FormView api="http://hidden-taiga-3220.herokuapp.com/v1/seo"/>, document.getElementById('app'));
